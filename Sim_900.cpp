@@ -58,10 +58,15 @@ void Sim900_recv_handler()
 
 	while (!close) 
 	{	/// TODO падает!!!
-		if (!Sim900_read_COM(answer_from_com, true)) {
+		if (!Sim900_read_COM(answer_from_com, -1)) {
 			continue;
 		}
-			
+		// проверка, что пришла посылка, а не сообщение модуля
+		if (strlen(answer_from_com) != sizeof(stMainHeader))
+		{
+			cout << "что-то пришло.." << answer_from_com << endl;
+			continue;
+		}
 		stMainHeader* MainHeader = new stMainHeader();
 		memcpy(MainHeader, answer_from_com, sizeof(MainHeader));
 
@@ -186,14 +191,11 @@ char* answer(char* buffer)
 }
 
 //общение по COM порту
-int Sim900_read_COM(char* answer_from_com, int timeout_ms)
+BOOL Sim900_read_COM(char* answer_from_com, int timeout_ms)
 {
-	int i = 0;
-
-	char answer_from_COM[SIZE_BUFFER] = { 0 };
-	memset(answer_from_COM, 0, sizeof(char) * SIZE_BUFFER);
-	if (!_recieve_from_com_port_(answer_from_COM, TIMEOUT_MS_FOR_RECV))
-		return false;
+	if (_recieve_from_com_port_(answer_from_com, timeout_ms))
+		return true;
+	return false;
 }
 
 int Sim900_write_cmd(char* cmd)
@@ -213,7 +215,8 @@ int Sim900_write_cmd(char* cmd)
 BOOL Sim900_all_read(char* buffer, int count_word, int timeout_ms)
 {
 	if (timeout_ms == 0) timeout_ms = TIMEOUT_MS_FOR_RECV;
-
+	if (timeout_ms == -1) timeout_ms = INFINITE;
+	
 	int count = 0;
 	int count_read = 0;
 	while (count < count_word)
@@ -269,7 +272,7 @@ void Sim900_answer()
 {
 	char answer[SIZE_BUFFER] = { 0 };
 	char* tmp = &answer[0];
-	Sim900_read_COM(tmp, false);
+	Sim900_read_COM(tmp, TIMEOUT_MS_FOR_RECV); // изменяется указатель
 	cout << answer << endl;
 }
 
@@ -281,10 +284,16 @@ BOOL _recieve_from_com_port_(char* buffer, int timeout_ms)
 	COMSTAT		ab_comstat;
 	DWORD       dummy;
 	DWORD		mask, signal;
+	DWORD       timeout;
 	int			btr;
 
 	if (!h_com)
 		return false;
+
+	if (timeout_ms == -1)
+		timeout = INFINITE;
+	else 
+		timeout = timeout_ms;
 
 	status = WaitCommEvent(h_com, &mask, &m_ovRx);
 	dw_errors = GetLastError();
@@ -292,8 +301,7 @@ BOOL _recieve_from_com_port_(char* buffer, int timeout_ms)
 	{
 		do
 		{
-			signal = WaitForSingleObject(m_ovRx.hEvent, timeout_ms);
-
+			signal = WaitForSingleObject(m_ovRx.hEvent, timeout);
 			switch (signal)
 			{
 			case WAIT_OBJECT_0:

@@ -9,5 +9,5 @@ static int PORT = 7777; //->config
 
 #define SIZE_BUFFER 1024
 #define RASE 115200
-#define COM_PORT "COM1"
+#define COM_PORT "COM6"
 #define TIMEOUT_MS_FOR_RECV 1000

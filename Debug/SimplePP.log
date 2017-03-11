@@ -1,5 +1,2 @@
-﻿  Sim_900.cpp
-b:\project\simpleversion\simplepp\simplepp\sim_900.cpp(146): warning C4018: <: несоответствие типов со знаком и без знака
-b:\project\simpleversion\simplepp\simplepp\sim_900.cpp(170): warning C4018: <: несоответствие типов со знаком и без знака
-b:\project\simpleversion\simplepp\simplepp\sim_900.cpp(196): warning C4715: Sim900_read_COM: значение возвращается не при всех путях выполнения
+﻿  Source.cpp
   SimplePP.vcxproj -> B:\Project\SimpleVersion\SimplePP\Debug\SimplePP.exe

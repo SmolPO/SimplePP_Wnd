@@ -27,7 +27,10 @@ RTL_CRITICAL_SECTION my_cs;
 int main()
 {
 	if (!init())
+	{	
+		close_programm();
 		return 0;
+	}
 
 	while (true)
 	{
@@ -52,7 +55,7 @@ int main()
 		}
 		
 	}
-	//close_programm();
+	close_programm();
     return 0;
 }
 

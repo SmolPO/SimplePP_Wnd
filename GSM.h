@@ -80,9 +80,9 @@ BOOL send_new_command_server();
 
 // общие функции
 //bool connect_to_server();
-BOOL listen_server();
+DWORD WINAPI listen_server(void*);
 BOOL listen_lamps();
-//bool close_programm(); // TODO!
+BOOL close_programm(); // TODO!
 int _get_console_data(const char* mess);
 BOOL _get_cmd_and_data(int* cmd, int* data);
 

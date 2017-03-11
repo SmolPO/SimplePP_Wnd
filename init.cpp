@@ -89,6 +89,6 @@ int init()
 	is_connect_to_server = true;
 	
 	// поток прослушки порта
-	std::thread ThreadRecv(listen_server);
+	h_thread = CreateThread(NULL, 0, listen_server, NULL, NULL, NULL);
 	return 1;
 }

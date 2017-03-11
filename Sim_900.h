@@ -22,7 +22,7 @@ void Sim900_recv_handler();
 
 int Sim900_write_cmd(char* cmd);
 int Sim900_write_with_size(char* buff, int size);
-int Sim900_read_COM(char* answerCOM, int timeout_ms);
+BOOL Sim900_read_COM(char* answerCOM, int timeout_ms);
 BOOL Sim900_all_read(char* buffer, int count_word, int timeout_ms);
 int Sim900_cmp_strs(char* NeedAnswer);
 int Sim900_cmp_strs_with_time_out(char* answer);
